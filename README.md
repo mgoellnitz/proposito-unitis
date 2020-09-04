@@ -33,14 +33,14 @@ data can be fetched at once. So this is a rolling calendar switching to next
 week's data on saturdays.
 
 ```
-Usage: fetchtimetable.sh username school [untis host]
+Usage: fetchtimetable.sh -s school -h host -p password username
 ```
 
-The school has to be given as the Untis school code, not name. There even is a
-hidden forth parameter for the password for purposes like cron-jobs:
+The school has to be given as the Untis school code, not name. The optional
+parameter for the password is for for purposes like cron-jobs:
 
 ```
-7 */2 * * * /home/www/fetchtimetable.sh sus.or.lol xy1234 some.untis secret > /var/www-data/somewhere/my.ics
+7 */2 * * * /home/www/fetchtimetable.sh -s xy1234 -h some.untis -p secret sus.or.lol > /var/www-data/somewhere/my.ics
 ```
 
 With this running on a webserver, you can use the corresponding URL to 
