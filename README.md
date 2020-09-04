@@ -24,27 +24,46 @@ mainly dealing with a time table here and that it sounds similar to untis.
 
 ## Usage
 
-Currently there is only one command available:
+Derived from the main command to fetch two weeks of timetable data for
+integration with calendar systems, subsequent selection commands are added.
 
-* Fetch this weeks time table
+* Fetch two weeks time table data
 
 Due to limitations in knownledge or the backend, only one week of time table
 data can be fetched at once. So this is a rolling calendar switching to next 
 week's data on saturdays.
 
 ```
-Usage: fetchtimetable.sh -s school -h host -p password username
+Usage: fetchtimetable.sh -s school -h host -p password -o output username
 ```
 
-The school has to be given as the Untis school code, not name. The optional
-parameter for the password is for for purposes like cron-jobs:
+The school has to be given as the Untis school code, not name. The school
+parameter uses a default value given by the environment variable $UNTIS_SCHOOL
+and the host uses the environment variable $UNTIS_HOST as a default. If no
+output file name is given, `untis-timetable.ics` is used. If no password is
+issued, you will be prompted to enter one.
 
+One example usage would be to place this command with a full set of command
+line argument in a cron-job:
 ```
-7 */2 * * * /home/www/fetchtimetable.sh -s xy1234 -h some.untis -p secret sus.or.lol > /var/www-data/somewhere/my.ics
+7 */2 * * * /home/www/fetchtimetable.sh -s xy1234 -h some.untis -p secret -o /var/www-data/somewhere/my.ics sus.or.lol
 ```
 
 With this running on a webserver, you can use the corresponding URL to 
 integrate the calender with any common calendar tool or mobile calendar.
+
+* Find next lesson
+
+Using the already fetched timetable data, it is possible to find out the next
+starting time of a lesson for a given school subject or form.
+
+```
+Usage: next-lesson.sh -f form -s subject
+```
+
+The defaults are read from the environment variables $SCHOOL_FORM and
+$SCHOOL_SUBJECT respectively. The output will be the starting time of thesegiven
+lesson or `?` if the subject or form cannot be found in the timetable data.
 
 ## References
 
