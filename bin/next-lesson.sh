@@ -19,13 +19,15 @@ MYNAME=`basename $0`
 
 TMPFILE="untis-timetable.ics"
 DATEFILE="/tmp/date.list"
+ZULU=""
 
 function usage {
-   echo "Usage: $MYNAME -t file -f form -s subject"
+   echo "Usage: $MYNAME [-z] [-t file] -f form -s subject"
    echo ""
-   echo "  form     form to filter output for"
-   echo "  subject  school subject to filter output for"
-   echo "  file     timetable file (downloaded with fetchtimetable)"
+   echo "  -f form     form to filter output for"
+   echo "  -s subject  school subject to filter output for"
+   echo "  -t file     timetable file (downloaded with fetchtimetable)"
+   echo "  -z          don't format time but use simple standard UTC based output"
    echo ""
    exit
 }
@@ -33,6 +35,9 @@ function usage {
 
 PSTART=$(echo $1|sed -e 's/^\(.\).*/\1/g')
 while [ "$PSTART" = "-" ] ; do
+  if [ "$1" = "-h" ] ; then
+    usage
+  fi
   if [ "$1" = "-f" ] ; then
     shift
     export SCHOOL_FORM="$1"
@@ -44,6 +49,9 @@ while [ "$PSTART" = "-" ] ; do
   if [ "$1" = "-t" ] ; then
     shift
     export TMPFILE="$1"
+  fi
+  if [ "$1" = "-z" ] ; then
+    export ZULU="zulu"
   fi
   shift
   PSTART=$(echo $1|sed -e 's/^\(.\).*/\1/g')
@@ -69,9 +77,9 @@ if [ -z "$SCHOOL_SUBJECT" ] ; then
   fi
 else
   if [ -z "$SCHOOL_FORM" ] ; then
-    cat $TMPFILE | grep -A2 -B6 SUMMARY:.*${SCHOOL_SUBJECT}|grep DTSTART > $DATEFILE
+    cat $TMPFILE | grep -i -A2 -B6 SUMMARY:.*${SCHOOL_SUBJECT}|grep DTSTART > $DATEFILE
   else
-    cat $TMPFILE | grep -A3 -B5 DESCRIPTION:.*${SCHOOL_FORM}|grep -B4 SUMMARY:.*${SCHOOL_SUBJECT}|grep DTSTART > $DATEFILE
+    cat $TMPFILE | grep -A3 -B5 DESCRIPTION:.*${SCHOOL_FORM}|grep -i -B4 SUMMARY:.*${SCHOOL_SUBJECT}|grep DTSTART > $DATEFILE
   fi
 fi
 if [ $(wc -l $DATEFILE|cut -d ' ' -f 1) -eq 0 ] ; then
@@ -82,5 +90,9 @@ MARK="DTSTART:$(date -d '+1 day' +%Y%m%dT)"
 echo $MARK>> $DATEFILE
 ZTIME=$(cat $DATEFILE|sort|grep -A1 $MARK|head -2|tail -1|cut -d ':' -f 2|sed -e 's/T/ /g'|sed -e 's/..Z//g')
 # echo $ZTIME
-date -d "TZ=\"UTC\" $ZTIME"
+if [ -z "$ZULU" ] ; then
+  date -d "TZ=\"UTC\" $ZTIME"
+else
+  echo $ZTIME
+fi
 rm $DATEFILE

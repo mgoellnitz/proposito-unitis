@@ -3,4 +3,4 @@
  * Dummy gradle settings file to be able to edit project name of the wiki to show up in my IDE NetBeans.
  *
  */
-rootProject.name = 'iServ Command Line Tools'
+rootProject.name = 'Untis Command Line Tools'
