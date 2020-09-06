@@ -65,7 +65,7 @@ if [ -z "$SCHOOL_FORM" ] ; then
 fi
 
 if [ ! -f $TMPFILE ] ; then
-  usage
+  echo "No timetable file $TMPFILE available. Please fetch current timetable data first."
   exit 1
 fi
 
