@@ -30,7 +30,7 @@ build:
   - unzip build/distributions/*.zip
   artifacts:
     paths:
-    - iServ*
+    - Unti*
     expire_in: 60 days
     name: ${CI_BUILD_STAGE}
 

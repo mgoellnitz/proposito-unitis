@@ -2,6 +2,7 @@
 
 [![License](https://img.shields.io/github/license/mgoellnitz/proposito-unitis.svg)](https://github.com/mgoellnitz/proposito-unitis/blob/master/LICENSE)
 [![Build](https://img.shields.io/gitlab/pipeline/backendzeit/proposito-unitis.svg)](https://gitlab.com/backendzeit/proposito-unitis/pipelines)
+[![Download](https://img.shields.io/badge/Download-Snapshot-blue)](https://gitlab.com/backendzeit/proposito-unitis/-/jobs/artifacts/master/download?job=build)
 
 "Hacking Untis for Fun and ... whatever."
 
