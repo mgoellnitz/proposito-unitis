@@ -52,6 +52,12 @@ line argument in a cron-job:
 With this running on a webserver, you can use the corresponding URL to 
 integrate the calender with any common calendar tool or mobile calendar.
 
+* Fetch calendar data from export URL
+
+If you don't need the web export and have a fixed URL to fetch equivalent
+timetable data from, you can issue a URL instead of the user's login name
+or even store this in the environment variable `UNTIS_URL`.
+
 * Find next lesson
 
 Using the already fetched timetable data, it is possible to find out the next

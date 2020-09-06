@@ -18,13 +18,13 @@
 MYNAME=`basename $0`
 
 function usage {
-   echo "Usage: $MYNAME -s school -h host -p password -o filename username"
+   echo "Usage: $MYNAME -s school -h host -p password -o filename username_or_URL"
    echo ""
-   echo "  username   login of the user"
-   echo "  school     untis UNTIS_SCHOOL for the given untis host (defaults to \$UNTIS_SCHOOL)"
-   echo "  host       fqdn of the untis endpoint (defaults to \$UNTIS_HOST)"
-   echo "  password   password for unti web login"
-   echo "  filename   name of the output file (defaults to untis-schedule.ics)"
+   echo "  username_or_URL  login of the user or full URL to fetch an equivalent calender"
+   echo "  school           untis UNTIS_SCHOOL for the given untis host (defaults to \$UNTIS_SCHOOL)"
+   echo "  host             fqdn of the untis endpoint (defaults to \$UNTIS_HOST)"
+   echo "  password         password for untis web login"
+   echo "  filename         name of the output file (defaults to untis-schedule.ics)"
    echo ""
    exit
 }
@@ -51,7 +51,7 @@ while [ "$PSTART" = "-" ] ; do
   shift
   PSTART=$(echo $1|sed -e 's/^\(.\).*/\1/g')
 done
-USERNAME=${1}
+USERNAME=${1:-$UNTIS_URL}
 
 if [ -z "$USERNAME" ] ; then
   usage
@@ -67,15 +67,19 @@ if [ -z "$UNTIS_HOST" ] ; then
    exit
 fi
 
-if [ -z $PASSWORD ] ; then
-  echo -n "Password for $USERNAME@$UNTIS_HOST/$UNTIS_SCHOOL: "
-  read -s PASSWORD
+if [ "$(echo $USERNAME|grep ':'|wc -l)" -gt 0 ] ; then
+  curl "$USERNAME" 2> /dev/null > $OUTFILE
+else
+  if [ -z $PASSWORD ] ; then
+    echo -n "Password for $USERNAME@$UNTIS_HOST/$UNTIS_SCHOOL: "
+    read -s PASSWORD
+  fi
+
+  rm -f ~/.untis.cookies.$USERNAME
+  # echo "$UNTIS_HOST" > ~/.untis.host.$USERNAME
+  DATA=$(curl -c ~/.untis.cookies.$USERNAME -X POST -D - \
+              -d "school=${UNTIS_SCHOOL}&j_username=${USERNAME}&j_password=${PASSWORD}&token=" https://${UNTIS_HOST}/WebUntis/j_spring_security_check 2> /dev/null)
+
+  curl -b ~/.untis.cookies.$USERNAME "https://${UNTIS_HOST}/WebUntis/Ical.do?elemType=5&elemId=455&rpt_sd="$(date -d "+2 days" +%Y-%m-%d) 2> /dev/null |grep -v END.VCALENDAR> $OUTFILE
+  curl -b ~/.untis.cookies.$USERNAME "https://${UNTIS_HOST}/WebUntis/Ical.do?elemType=5&elemId=455&rpt_sd="$(date -d "+9 days" +%Y-%m-%d) 2> /dev/null |grep -v BEGIN.VCALENDAR|grep -v PRODID:|grep -v VERSION:|grep -v CALSCALE:>> $OUTFILE
 fi
-
-rm -f ~/.untis.cookies.$USERNAME
-# echo "$UNTIS_HOST" > ~/.untis.host.$USERNAME
-DATA=$(curl -c ~/.untis.cookies.$USERNAME -X POST -D - \
-            -d "school=${UNTIS_SCHOOL}&j_username=${USERNAME}&j_password=${PASSWORD}&token=" https://${UNTIS_HOST}/WebUntis/j_spring_security_check 2> /dev/null)
-
-curl -b ~/.untis.cookies.$USERNAME "https://${UNTIS_HOST}/WebUntis/Ical.do?elemType=5&elemId=455&rpt_sd="$(date -d "+2 days" +%Y-%m-%d) 2> /dev/null |grep -v END.VCALENDAR> $OUTFILE
-curl -b ~/.untis.cookies.$USERNAME "https://${UNTIS_HOST}/WebUntis/Ical.do?elemType=5&elemId=455&rpt_sd="$(date -d "+9 days" +%Y-%m-%d) 2> /dev/null |grep -v BEGIN.VCALENDAR|grep -v PRODID:|grep -v VERSION:|grep -v CALSCALE:>> $OUTFILE
