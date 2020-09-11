@@ -73,26 +73,42 @@ if [ -z "$SCHOOL_SUBJECT" ] ; then
   if [ -z "$SCHOOL_FORM" ] ; then
     echo ""
   else
-    cat $TMPFILE | grep -A3 -B5 DESCRIPTION:.*${SCHOOL_FORM}|grep DTSTART > $DATEFILE
+    cat $TMPFILE | grep -A3 -B6 DESCRIPTION:.*${SCHOOL_FORM}|grep DTSTART
+    cat $TMPFILE | grep -A3 -B6 DESCRIPTION:.*${SCHOOL_FORM}|grep DTSTART > $DATEFILE
   fi
 else
   if [ -z "$SCHOOL_FORM" ] ; then
-    cat $TMPFILE | grep -i -A2 -B6 SUMMARY:.*${SCHOOL_SUBJECT}|grep DTSTART > $DATEFILE
+    cat $TMPFILE | grep -i -A2 -B7 SUMMARY:.*${SCHOOL_SUBJECT}|grep DTSTART > $DATEFILE
   else
-    cat $TMPFILE | grep -A3 -B5 DESCRIPTION:.*${SCHOOL_FORM}|grep -i -B4 SUMMARY:.*${SCHOOL_SUBJECT}|grep DTSTART > $DATEFILE
+    cat $TMPFILE | grep -A3 -B6 DESCRIPTION:.*${SCHOOL_FORM}|grep -i -B5 SUMMARY:.*${SCHOOL_SUBJECT}|grep DTSTART > $DATEFILE
   fi
 fi
 if [ $(wc -l $DATEFILE|cut -d ' ' -f 1) -eq 0 ] ; then
   echo "?"
   exit 1
 fi
-MARK="DTSTART:$(date -d '+1 day' +%Y%m%dT)"
+MARK="$(grep DTSTART $TMPFILE |tail -1|cut -d ':' -f 1):$(date -d '+1 day' +%Y%m%dT)"
 echo $MARK>> $DATEFILE
-ZTIME=$(cat $DATEFILE|sort|grep -A1 $MARK|head -2|tail -1|cut -d ':' -f 2|sed -e 's/T/ /g'|sed -e 's/..Z//g')
-# echo $ZTIME
+cat $DATEFILE|sed 's/\r$//g'|sort|grep -A1 "$MARK"
+echo ""
+# TODO: Add TIMEZONE discovery here
+ZTIME=$(cat $DATEFILE|sed 's/\r$//g'|sort|grep -A1 "$MARK"|head -2|tail -1|cut -d ':' -f 2|sed -e 's/\(T[0-9][0-9][0-9][0-9]\)[0-9][0-9]$/\1/g'|sed -e 's/T/ /g'|sed -e 's/..Z//g')
+echo $ZTIME
+TZ="$(cat $DATEFILE|sort|grep -A1 "$MARK"|head -2|tail -1|cut -d ':' -f 1|sed -e 's/DTSTART//g'|sed -e 's/;TZID=/TZ="/g')"
+echo $TZ
 if [ -z "$ZULU" ] ; then
-  date -d "TZ=\"UTC\" $ZTIME"
+  if [ -z TZ ] ; then
+    date -d "TZ=\"UTC\" $ZTIME"
+  else
+    TZ="$TZ\""
+    date -d "$TZ $ZTIME"
+  fi
 else
-  echo $ZTIME
+  if [ -z TZ ] ; then
+    echo $ZTIME
+  else
+    TZ="$TZ\""
+    echo $ZTIME
+  fi
 fi
-rm $DATEFILE
+# rm $DATEFILE
