@@ -9,8 +9,9 @@
 This repository is to hack around certain limitations in the Untis accounts we 
 have access to. It uses a parsed web-frontend and not the app backend so far.
 
-Sorry to tell you that due to personal preferences in our household all these
-scripts are and will be only linux-tested.
+The scripts are mainly used with GNU/Linux  but are also partially tested with
+a Windows Subsystem for Linux and a Debian install from the store on top of
+that.
 
 ## Feedback
 
@@ -22,6 +23,23 @@ for feedback.
 
 The name is just a pun on `viribus unitis` reflecting the fact, that we are
 mainly dealing with a time table here and that it sounds similar to untis.
+
+## Windows Integration
+
+The use of this tool with windows is possible but limited to systems where the
+Windows Subsystem for Linux (WSL) is installed and a linux distribution
+`Debian` or `Ubuntu` is installed from the Store.
+
+## Installation
+
+Besides the usual manual mode if extracting the files from the distribution
+archive to a place of your chosing and add this to you PATH, a short version
+for inexperiences users is presented especially on Windows (WSL) systems.
+
+After downloading and extracting the archive call `./install.sh` in the top
+level directory or double-click `install.bat`.
+
+(This installation method is not meant to be the most elegant way.)
 
 ## Usage
 
@@ -69,8 +87,27 @@ Usage: next-lesson.sh -f form -s subject
 ```
 
 The defaults are read from the environment variables $SCHOOL_FORM and
-$SCHOOL_SUBJECT respectively. The output will be the starting time of thesegiven
+$SCHOOL_SUBJECT respectively. The output will be the starting time of the given
 lesson or `?` if the subject or form cannot be found in the timetable data.
+
+## Context Switches
+
+For convenience the environment variables defining your school code and host to use
+
+Especially in Teacher View many parameters will be needed and be mostly
+constant over a given period in time. To avoid this, some parameters may be
+given as environment variables.
+
+Those variables may be modified in your shell defaults with some convenience
+scripts.
+
+* Setup basic Parameters
+
+```
+./timetable-setup.sh
+Untis Host: stundenplan.hamburg.de
+Untis School Code: hh5848
+```
 
 ## References
 

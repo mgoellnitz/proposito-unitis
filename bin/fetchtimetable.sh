@@ -48,14 +48,13 @@ while [ "$PSTART" = "-" ] ; do
     shift
     export OUTFILE="$1"
   fi
+  if [ "$1" = "-i" ] ; then
+    INTERACTIVE=true
+  fi
   shift
   PSTART=$(echo $1|sed -e 's/^\(.\).*/\1/g')
 done
 USERNAME=${1:-$UNTIS_URL}
-
-if [ -z "$USERNAME" ] ; then
-  usage
-fi
 
 if [ -z "$UNTIS_SCHOOL" ] ; then
    echo "Error: Untis UNTIS_SCHOOL must be given as a parameter or by environment variable UNTIS_SCHOOL."
@@ -65,6 +64,15 @@ fi
 if [ -z "$UNTIS_HOST" ] ; then
    echo "Error: Untis Host must be given as a parameter or by environment variable UNTIS_HOST."
    exit
+fi
+
+if [ -z "$USERNAME" ] ; then
+  if [ -z "$INTERACTIVE" ] ; then
+    usage
+  else
+    echo -n "Username for $UNTIS_HOST/$UNTIS_SCHOOL: "
+    read USERNAME
+  fi
 fi
 
 if [ "$(echo $USERNAME|grep ':'|wc -l)" -gt 0 ] ; then
