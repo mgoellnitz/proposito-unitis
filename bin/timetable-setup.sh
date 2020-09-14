@@ -15,14 +15,29 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
-echo -n "Untis Host: "
-read UNTIS_HOST
+WINDOWS=$(uname -a|grep Microsoft)
+if [ ! -z "$WINDOWS" ] ; then
+  ZENITY=zenity.exe
+else
+  ZENITY=zenity
+fi
+if [ -z $(which zenity|wc -l) ] ; then
+  ZENITY=
+fi
+
+if [ -z "$ZENITY" ] ; then
+  echo -n "Untis Host: "
+  read UNTIS_HOST
+  echo -n "Untis School Code: "
+  read UNTIS_SCHOOL
+else
+  UNTIS_HOST=$($ZENITY --entry --text="Backend Hostname" --entry-text="$UNTIS_HOST" --title="Untis")
+  UNTIS_SCHOOL=$($ZENITY --entry --text="Schulcode" --entry-text="$UNTIS_SCHOOL" --title="Untis")
+fi
+
 grep -v UNTIS_HOST= ~/.bashrc > brc 
 mv brc ~/.bashrc
 echo "export UNTIS_HOST=$UNTIS_HOST" >> ~/.bashrc
-echo -n "Untis School Code: "
-read UNTIS_SCHOOL
 grep -v UNTIS_SCHOOL= ~/.bashrc > brc 
 mv brc ~/.bashrc
 echo "export UNTIS_SCHOOL=$UNTIS_SCHOOL" >> ~/.bashrc
-source ~/.bashrc

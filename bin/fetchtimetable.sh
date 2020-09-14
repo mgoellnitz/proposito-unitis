@@ -18,13 +18,14 @@
 MYNAME=`basename $0`
 
 function usage {
-   echo "Usage: $MYNAME -s school -h host -p password -o filename username_or_URL"
+   echo "Usage: $MYNAME [-i] [-s school] [-h host] [-p password] [-o filename] username_or_URL"
    echo ""
-   echo "  username_or_URL  login of the user or full URL to fetch an equivalent calender"
-   echo "  school           untis UNTIS_SCHOOL for the given untis host (defaults to \$UNTIS_SCHOOL)"
-   echo "  host             fqdn of the untis endpoint (defaults to \$UNTIS_HOST)"
-   echo "  password         password for untis web login"
-   echo "  filename         name of the output file (defaults to untis-schedule.ics)"
+   echo "  -i                  interactive"
+   echo "     username_or_URL  login of the user or full URL to fetch an equivalent calender"
+   echo "  -s school           untis UNTIS_SCHOOL for the given untis host (defaults to \$UNTIS_SCHOOL)"
+   echo "  -h host             fqdn of the untis endpoint (defaults to \$UNTIS_HOST)"
+   echo "  -p password         password for untis web login"
+   echo "  -o filename         name of the output file (defaults to untis-schedule.ics)"
    echo ""
    exit
 }
@@ -66,12 +67,29 @@ if [ -z "$UNTIS_HOST" ] ; then
    exit
 fi
 
+WINDOWS=$(uname -a|grep Microsoft)
+if [ ! -z "$WINDOWS" ] ; then
+  ZENITY=zenity.exe
+else
+  ZENITY=zenity
+fi
+if [ -z $(which zenity|wc -l) ] ; then
+  ZENITY=
+fi
+
 if [ -z "$USERNAME" ] ; then
   if [ -z "$INTERACTIVE" ] ; then
     usage
   else
-    echo -n "Username for $UNTIS_HOST/$UNTIS_SCHOOL: "
-    read USERNAME
+    if [ -z "$ZENITY" ] ; then
+      echo -n "Username for $UNTIS_HOST/$UNTIS_SCHOOL: "
+      read USERNAME
+    else
+      USERNAME=$($ZENITY --entry --text="Nutzername oder URL" --entry-text="$UNTIS_URL" --title="Untis")
+    fi
+    if [ -z "$USERNAME" ] ; then
+      usage
+    fi
   fi
 fi
 
@@ -79,8 +97,12 @@ if [ "$(echo $USERNAME|grep ':'|wc -l)" -gt 0 ] ; then
   curl "$USERNAME" 2> /dev/null > $OUTFILE
 else
   if [ -z $PASSWORD ] ; then
-    echo -n "Password for $USERNAME@$UNTIS_HOST/$UNTIS_SCHOOL: "
-    read -s PASSWORD
+    if [ -z "$ZENITY" ] ; then
+      echo -n "Password for $USERNAME@$UNTIS_HOST/$UNTIS_SCHOOL: "
+      read -s PASSWORD
+    else
+      PASSWORD=$($ZENITY --entry --text="Kennwort" --entry-text="$PASSWORD" --hide-text --title="Untis")
+    fi
   fi
 
   rm -f ~/.untis.cookies.$USERNAME

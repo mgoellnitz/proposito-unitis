@@ -46,6 +46,9 @@ level directory or double-click `install.bat`.
 Derived from the main command to fetch two weeks of timetable data for
 integration with calendar systems, subsequent selection commands are added.
 
+Windows users double-click the commands from the windows folder of the
+installation.
+
 * Fetch two weeks time table data
 
 Due to limitations in knownledge or the backend, only one week of time table
@@ -53,8 +56,11 @@ data can be fetched at once. So this is a rolling calendar switching to next
 week's data on saturdays.
 
 ```
-Usage: fetchtimetable.sh -s school -h host -p password -o output username
+Usage: fetchtimetable.sh [-i] [-s school] [-h host] [-p password] [-o filename] username_or_URL
 ```
+
+If you prefer some - potentially GUI based - guidance, use the interactive mode
+with the `-i` option.
 
 The school has to be given as the Untis school code, not name. The school
 parameter uses a default value given by the environment variable $UNTIS_SCHOOL
