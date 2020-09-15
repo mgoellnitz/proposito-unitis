@@ -85,7 +85,7 @@ if [ -z "$USERNAME" ] ; then
       echo -n "Username for $UNTIS_HOST/$UNTIS_SCHOOL: "
       read USERNAME
     else
-      USERNAME=$($ZENITY --entry --text="Nutzername oder URL" --entry-text="$UNTIS_URL" --title="Untis")
+      USERNAME=$($ZENITY --entry --text="Nutzername oder URL" --entry-text="$UNTIS_URL" --title="Untis"|sed -e 's/\r//g')
     fi
     if [ -z "$USERNAME" ] ; then
       usage
@@ -101,7 +101,7 @@ else
       echo -n "Password for $USERNAME@$UNTIS_HOST/$UNTIS_SCHOOL: "
       read -s PASSWORD
     else
-      PASSWORD=$($ZENITY --entry --text="Kennwort" --entry-text="$PASSWORD" --hide-text --title="Untis")
+      PASSWORD=$($ZENITY --entry --text="Kennwort" --entry-text="$PASSWORD" --hide-text --title="Untis"|sed -e 's/\r//g')
     fi
   fi
 

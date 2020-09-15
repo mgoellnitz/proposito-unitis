@@ -31,8 +31,8 @@ if [ -z "$ZENITY" ] ; then
   echo -n "Untis School Code: "
   read UNTIS_SCHOOL
 else
-  UNTIS_HOST=$($ZENITY --entry --text="Backend Hostname" --entry-text="$UNTIS_HOST" --title="Untis")
-  UNTIS_SCHOOL=$($ZENITY --entry --text="Schulcode" --entry-text="$UNTIS_SCHOOL" --title="Untis")
+  UNTIS_HOST=$($ZENITY --entry --text="Backend Hostname" --entry-text="$UNTIS_HOST" --title="Untis"|sed -e 's/\r//g')
+  UNTIS_SCHOOL=$($ZENITY --entry --text="Schulcode" --entry-text="$UNTIS_SCHOOL" --title="Untis"|sed -e 's/\r//g')
 fi
 
 grep -v UNTIS_HOST= ~/.bashrc > brc 
