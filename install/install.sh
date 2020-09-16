@@ -28,6 +28,14 @@ if [ ! -z "$WINDOWS" ] && [ ! -f /usr/local/bin/zenity.exe ] ; then
   sudo mv zenity.exe /usr/local/bin
   rm zenity.zip
 fi
+if [ ! -z "$WINDOWS" ] ; then
+  ZENITY=zenity.exe
+else
+  ZENITY=zenity
+fi
+if [ -z $(which zenity|wc -l) ] ; then
+  ZENITY=
+fi
 timetable-setup.sh
 if [ -z "$ZENITY" ] ; then
   echo "Installation finished."
