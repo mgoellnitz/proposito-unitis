@@ -110,8 +110,28 @@ else
   DATA=$(curl -c ~/.untis.cookies.$USERNAME -X POST -D - \
               -d "school=${UNTIS_SCHOOL}&j_username=${USERNAME}&j_password=${PASSWORD}&token=" https://${UNTIS_HOST}/WebUntis/j_spring_security_check 2> /dev/null)
 
-  curl -b ~/.untis.cookies.$USERNAME "https://${UNTIS_HOST}/WebUntis/Ical.do?elemType=5&elemId=455&rpt_sd="$(date -d "+2  days" +%Y-%m-%d) 2> /dev/null |grep -v END.VCALENDAR> $OUTFILE
-  curl -b ~/.untis.cookies.$USERNAME "https://${UNTIS_HOST}/WebUntis/Ical.do?elemType=5&elemId=455&rpt_sd="$(date -d "+9  days" +%Y-%m-%d) 2> /dev/null |grep -v VCALENDAR|grep -v PRODID:|grep -v VERSION:|grep -v CALSCALE:>> $OUTFILE
-  curl -b ~/.untis.cookies.$USERNAME "https://${UNTIS_HOST}/WebUntis/Ical.do?elemType=5&elemId=455&rpt_sd="$(date -d "+16 days" +%Y-%m-%d) 2> /dev/null |grep -v VCALENDAR|grep -v PRODID:|grep -v VERSION:|grep -v CALSCALE:>> $OUTFILE
-  curl -b ~/.untis.cookies.$USERNAME "https://${UNTIS_HOST}/WebUntis/Ical.do?elemType=5&elemId=455&rpt_sd="$(date -d "+23 days" +%Y-%m-%d) 2> /dev/null |grep -v BEGIN.VCALENDAR|grep -v PRODID:|grep -v VERSION:|grep -v CALSCALE:>> $OUTFILE
+  if [ -z "$(uname -v|grep Darwin)" ] ; then
+    WEEK=$(date -d "+2  days" +%Y-%m-%d)
+  else
+    WEEK=$(date -jf "%s" $[ $(date "+%s") + (86400*2) ] "+%Y-%m-%d")
+  fi
+  curl -b ~/.untis.cookies.$USERNAME "https://${UNTIS_HOST}/WebUntis/Ical.do?elemType=5&elemId=455&rpt_sd=$WEEK" 2> /dev/null |grep -v END.VCALENDAR> $OUTFILE
+  if [ -z "$(uname -v|grep Darwin)" ] ; then
+    WEEK=$(date -d "+9  days" +%Y-%m-%d)
+  else
+    WEEK=$(date -jf "%s" $[ $(date "+%s") + (86400*9) ] "+%Y-%m-%d")
+  fi
+  curl -b ~/.untis.cookies.$USERNAME "https://${UNTIS_HOST}/WebUntis/Ical.do?elemType=5&elemId=455&rpt_sd=$WEEK" 2> /dev/null |grep -v VCALENDAR|grep -v PRODID:|grep -v VERSION:|grep -v CALSCALE:>> $OUTFILE
+  if [ -z "$(uname -v|grep Darwin)" ] ; then
+    WEEK=$(date -d "+16  days" +%Y-%m-%d)
+  else
+    WEEK=$(date -jf "%s" $[ $(date "+%s") + (86400*16) ] "+%Y-%m-%d")
+  fi
+  curl -b ~/.untis.cookies.$USERNAME "https://${UNTIS_HOST}/WebUntis/Ical.do?elemType=5&elemId=455&rpt_sd=$WEEK" 2> /dev/null |grep -v VCALENDAR|grep -v PRODID:|grep -v VERSION:|grep -v CALSCALE:>> $OUTFILE
+  if [ -z "$(uname -v|grep Darwin)" ] ; then
+    WEEK=$(date -d "+23  days" +%Y-%m-%d)
+  else
+    WEEK=$(date -jf "%s" $[ $(date "+%s") + (86400*23) ] "+%Y-%m-%d")
+  fi
+  curl -b ~/.untis.cookies.$USERNAME "https://${UNTIS_HOST}/WebUntis/Ical.do?elemType=5&elemId=455&rpt_sd=$WEEK" 2> /dev/null |grep -v BEGIN.VCALENDAR|grep -v PRODID:|grep -v VERSION:|grep -v CALSCALE:>> $OUTFILE
 fi
