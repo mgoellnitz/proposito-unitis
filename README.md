@@ -57,7 +57,7 @@ integration with calendar systems, subsequent selection commands are added.
 Windows users double-click the commands from the windows folder of the
 installation.
 
-* Fetch two weeks time table data
+* Fetch four weeks time table data
 
 Due to limitations in knownledge or the backend, only one week of time table
 data can be fetched at once. So this is a rolling calendar switching to next 
@@ -100,9 +100,26 @@ starting time of a lesson for a given school subject or form.
 Usage: next-lesson.sh -f form -s subject
 ```
 
-The defaults are read from the environment variables $SCHOOL_FORM and
-$SCHOOL_SUBJECT respectively. The output will be the starting time of the given
-lesson or `?` if the subject or form cannot be found in the timetable data.
+The defaults are read from the environment variables `$SCHOOL_FORM` and
+`$SCHOOL_SUBJECT` respectively. The output will be the starting time of the 
+given lesson or `?` if the subject or form cannot be found in the timetable 
+data. At least form or subject need to be given.
+
+Examples:
+
+```
+# Next lesson in 11th form
+next-lesson.sh -f 11
+Mo 21. Sep 09:40:00 CEST 2020
+
+# Next Maths lesson
+next-lesson.sh -s Mat
+Di 22. Sep 09:40:00 CEST 2020
+
+# Next Maths lesson in 11th form - relevant for teachers
+next-lesson.sh -f 11 -s Bio
+Mo 21. Sep 13:40:00 CEST 2020
+```
 
 ## Context Switches
 
