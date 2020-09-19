@@ -19,7 +19,11 @@ MYNAME=`basename $0`
 
 TMPFILE="untis-timetable.ics"
 DATEFILE="/tmp/date.list"
-ZULU=""
+if [ -z "$(uname -v|grep Darwin)" ] ; then
+  ZULU=""
+else
+  ZULU="zulu"
+fi
 
 function usage {
    echo "Usage: $MYNAME [-z] [-t file] -f form -s subject"
@@ -40,29 +44,22 @@ while [ "$PSTART" = "-" ] ; do
   fi
   if [ "$1" = "-f" ] ; then
     shift
-    export SCHOOL_FORM="$1"
+    SCHOOL_FORM="$1"
   fi
   if [ "$1" = "-s" ] ; then
     shift
-    export SCHOOL_SUBJECT="$1"
+    SCHOOL_SUBJECT="$1"
   fi
   if [ "$1" = "-t" ] ; then
     shift
-    export TMPFILE="$1"
+    TMPFILE="$1"
   fi
   if [ "$1" = "-z" ] ; then
-    export ZULU="zulu"
+    ZULU="zulu"
   fi
   shift
   PSTART=$(echo $1|sed -e 's/^\(.\).*/\1/g')
 done
-
-if [ -z "$SCHOOL_FORM" ] ; then
-  if [ -z "$SCHOOL_SUBJECT" ] ; then
-    usage
-    exit 1
-  fi
-fi
 
 if [ ! -f $TMPFILE ] ; then
   echo "No timetable file $TMPFILE available. Please fetch current timetable data first."
@@ -71,7 +68,8 @@ fi
 
 if [ -z "$SCHOOL_SUBJECT" ] ; then
   if [ -z "$SCHOOL_FORM" ] ; then
-    echo ""
+    usage
+    exit 1
   else
     cat $TMPFILE | grep -A3 -B5 DESCRIPTION:.*${SCHOOL_FORM}|grep DTSTART > $DATEFILE
   fi
@@ -82,11 +80,16 @@ else
     cat $TMPFILE | grep -A3 -B5 DESCRIPTION:.*${SCHOOL_FORM}|grep -i -B4 SUMMARY:.*${SCHOOL_SUBJECT}|grep DTSTART > $DATEFILE
   fi
 fi
-if [ $(wc -l $DATEFILE|cut -d ' ' -f 1) -eq 0 ] ; then
+if [ $(cat $DATEFILE|wc -l) -eq 0 ] ; then
   echo "?"
   exit 1
 fi
-MARK="DTSTART:$(date -d '+1 day' +%Y%m%dT)"
+if [ -z "$(uname -v|grep Darwin)" ] ; then
+  MARKDATE=$(date -d "+1  days" +%Y%m%dT)
+else
+  MARKDATE=$(date -jf "%s" $[ $(date "+%s") + 86400 ] "+%Y%m%dT")
+fi
+MARK="DTSTART:$MARKDATE"
 echo $MARK>> $DATEFILE
 ZTIME=$(cat $DATEFILE|sort|grep -A1 $MARK|head -2|tail -1|cut -d ':' -f 2|sed -e 's/T/ /g'|sed -e 's/..Z//g')
 # echo $ZTIME
