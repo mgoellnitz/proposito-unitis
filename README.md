@@ -9,9 +9,12 @@
 This repository is to hack around certain limitations in the Untis accounts we 
 have access to. It uses a parsed web-frontend and not the app backend so far.
 
-The scripts are mainly used with GNU/Linux  but are also partially tested with
-a Windows Subsystem for Linux and a Debian install from the store on top of
-that.
+The scripts are mainly used with GNU/Linux but are also partially tested with
+MacOS and also Windows Systems with a `Windows Subsystem for Linux` and a Debian
+distribution install from the store on top of that.
+
+A limited GUI feeling is achived through the a simple dialog-to-shell tool
+(`zenity`) for GNU/Linux and Windows.
 
 ## Feedback
 

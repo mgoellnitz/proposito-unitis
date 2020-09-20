@@ -46,5 +46,5 @@ timetable-setup.sh
 if [ -z "$ZENITY" ] ; then
   echo "Installation finished."
 else
-  $ZENITY --info --title="Installation" --text="Die Installation ist abgeschlossen."
+  $ZENITY --info --title="Installation" --text="Die Installation ist abgeschlossen." --no-wrap
 fi
