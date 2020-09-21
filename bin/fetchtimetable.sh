@@ -16,11 +16,15 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 MYNAME=`basename $0`
+MYDIR=`dirname $0`
+LIBDIR=$MYDIR/../shared/proposito-unitis
+source $LIBDIR/lib.sh
 
 function usage {
    echo "Usage: $MYNAME [-i] [-s school] [-h host] [-p password] [-o filename] username_or_URL"
    echo ""
    echo "  -i                  interactive"
+   echo "  -l language         set ISO-639 language code for output messages (except this one)"
    echo "     username_or_URL  login of the user or full URL to fetch an equivalent calender"
    echo "  -s school           untis UNTIS_SCHOOL for the given untis host (defaults to \$UNTIS_SCHOOL)"
    echo "  -h host             fqdn of the untis endpoint (defaults to \$UNTIS_HOST)"
@@ -33,59 +37,43 @@ function usage {
 OUTFILE=untis-timetable.ics
 PSTART=$(echo $1|sed -e 's/^\(.\).*/\1/g')
 while [ "$PSTART" = "-" ] ; do
-  if [ "$1" = "-s" ] ; then
-    shift
-    export UNTIS_SCHOOL="$1"
-  fi
   if [ "$1" = "-h" ] ; then
     shift
     export UNTIS_HOST="$1"
   fi
-  if [ "$1" = "-p" ] ; then
-    shift
-    export PASSWORD="$1"
+  if [ "$1" = "-i" ] ; then
+    INTERACTIVE=true
   fi
   if [ "$1" = "-o" ] ; then
     shift
     export OUTFILE="$1"
   fi
-  if [ "$1" = "-i" ] ; then
-    INTERACTIVE=true
+  if [ "$1" = "-l" ] ; then
+    shift
+    export LANGUAGE="$1"
+  fi
+  if [ "$1" = "-p" ] ; then
+    shift
+    export PASSWORD="$1"
+  fi
+  if [ "$1" = "-s" ] ; then
+    shift
+    export UNTIS_SCHOOL="$1"
   fi
   shift
   PSTART=$(echo $1|sed -e 's/^\(.\).*/\1/g')
 done
 USERNAME=${1:-$UNTIS_URL}
 
-if [ -z "$UNTIS_SCHOOL" ] ; then
-   echo "Error: Untis UNTIS_SCHOOL must be given as a parameter or by environment variable UNTIS_SCHOOL."
-   exit
-fi
-
-if [ -z "$UNTIS_HOST" ] ; then
-   echo "Error: Untis Host must be given as a parameter or by environment variable UNTIS_HOST."
-   exit
-fi
-
-WINDOWS=$(uname -a|grep Microsoft)
-if [ ! -z "$WINDOWS" ] ; then
-  ZENITY=zenity.exe
-else
-  ZENITY=zenity
-fi
-if [ -z "$(which zenity)" ] ; then
-  ZENITY=
-fi
-
 if [ -z "$USERNAME" ] ; then
   if [ -z "$INTERACTIVE" ] ; then
     usage
   else
     if [ -z "$ZENITY" ] ; then
-      echo -n "Username for $UNTIS_HOST/$UNTIS_SCHOOL: "
+      echo -n "$(message "username_url"): "
       read USERNAME
     else
-      USERNAME=$($ZENITY --entry --text="Nutzername oder URL" --entry-text="$UNTIS_URL" --title="Untis"|sed -e 's/\r//g')
+      USERNAME=$($ZENITY --entry --text="$(message "username_url")" --entry-text="$UNTIS_URL" --title="Untis"|sed -e 's/\r//g')
     fi
     if [ -z "$USERNAME" ] ; then
       usage
@@ -96,12 +84,22 @@ fi
 if [ "$(echo $USERNAME|grep ':'|wc -l)" -gt 0 ] ; then
   curl "$USERNAME" 2> /dev/null > $OUTFILE
 else
+  if [ -z "$UNTIS_SCHOOL" ] ; then
+     echo $(message "no_school")
+     exit
+  fi
+
+  if [ -z "$UNTIS_HOST" ] ; then
+     echo $(message "no_host")
+     exit
+  fi
+
   if [ -z $PASSWORD ] ; then
     if [ -z "$ZENITY" ] ; then
-      echo -n "Password for $USERNAME@$UNTIS_HOST/$UNTIS_SCHOOL: "
+      echo -n "$(message "password_for") $USERNAME@$UNTIS_HOST/$UNTIS_SCHOOL: "
       read -s PASSWORD
     else
-      PASSWORD=$($ZENITY --entry --text="Kennwort" --entry-text="$PASSWORD" --hide-text --title="Untis"|sed -e 's/\r//g')
+      PASSWORD=$($ZENITY --entry --text="$(message "password_for") $USERNAME@$UNTIS_HOST/$UNTIS_SCHOOL" --entry-text="$PASSWORD" --hide-text --title="Untis"|sed -e 's/\r//g')
     fi
   fi
 

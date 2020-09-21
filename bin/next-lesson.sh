@@ -16,6 +16,9 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 MYNAME=`basename $0`
+MYDIR=`dirname $0`
+LIBDIR=$MYDIR/../shared/proposito-unitis
+source $LIBDIR/lib.sh
 
 TMPFILE="untis-timetable.ics"
 DATEFILE="/tmp/date.list"
@@ -35,7 +38,6 @@ function usage {
    echo ""
    exit
 }
-
 
 PSTART=$(echo $1|sed -e 's/^\(.\).*/\1/g')
 while [ "$PSTART" = "-" ] ; do

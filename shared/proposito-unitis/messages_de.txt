@@ -1,0 +1,8 @@
+no_school=Fehler: Der Untis-Schulcode muß über den entsprechenden Parameter oder die Umgebungsvariable $UNTIS_SCHOOL gesetzt werden.
+no_host=Fehler: Der Untis Domain-Name muß als Parameter oder über die Umgebungsvariable $UNTIS_HOST gesetzt werden.
+host=Untis Hostname
+code=Untis Schulcode
+username_url=Benutzer oder URL
+password_for=Passwort für
+installation=Installation
+installation_completed=Die Installation ist abgeschlossen.
