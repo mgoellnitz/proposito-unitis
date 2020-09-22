@@ -44,8 +44,4 @@ if [ ! -z "$(uname -v|grep Darwin)" ] ; then
   echo 'if [ -s ~/.bashrc ]; then source ~/.bashrc; fi' >> ~/.bash_profile
 fi
 timetable-setup.sh
-if [ -z "$ZENITY" ] ; then
-  echo "$(message "installation_completed")"
-else
-  $ZENITY --info --title="$(message "installation")" --text="$(message "installation_completed")" --no-wrap
-fi
+$(text_info installation installation_completed)

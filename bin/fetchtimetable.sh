@@ -69,12 +69,7 @@ if [ -z "$USERNAME" ] ; then
   if [ -z "$INTERACTIVE" ] ; then
     usage
   else
-    if [ -z "$ZENITY" ] ; then
-      echo -n "$(message "username_url"): "
-      read USERNAME
-    else
-      USERNAME=$($ZENITY --entry --text="$(message "username_url")" --entry-text="$UNTIS_URL" --title="Untis"|sed -e 's/\r//g')
-    fi
+    USERNAME=$(text_input Untis username_url "$UNTIS_URL")
     if [ -z "$USERNAME" ] ; then
       usage
     fi
@@ -95,12 +90,7 @@ else
   fi
 
   if [ -z $PASSWORD ] ; then
-    if [ -z "$ZENITY" ] ; then
-      echo -n "$(message "password_for") $USERNAME@$UNTIS_HOST/$UNTIS_SCHOOL: "
-      read -s PASSWORD
-    else
-      PASSWORD=$($ZENITY --entry --text="$(message "password_for") $USERNAME@$UNTIS_HOST/$UNTIS_SCHOOL" --entry-text="$PASSWORD" --hide-text --title="Untis"|sed -e 's/\r//g')
-    fi
+    PASSWORD=$(password_input Untis "$(message "password_for") $USERNAME@$UNTIS_HOST/$UNTIS_SCHOOL" "$PASSWORD")
   fi
 
   rm -f ~/.untis.cookies.$USERNAME

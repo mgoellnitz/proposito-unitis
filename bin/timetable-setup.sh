@@ -20,15 +20,8 @@ MYDIR=`dirname $0`
 LIBDIR=$MYDIR/../shared/proposito-unitis
 source $LIBDIR/lib.sh
 
-if [ -z "$ZENITY" ] ; then
-  echo -n "$(message "host"): "
-  read UNTIS_HOST
-  echo -n "$(message "code"): "
-  read UNTIS_SCHOOL
-else
-  UNTIS_HOST=$($ZENITY --entry --text="$(message "host")" --entry-text="$UNTIS_HOST" --title="Untis"|sed -e 's/\r//g')
-  UNTIS_SCHOOL=$($ZENITY --entry --text="$(message "code")" --entry-text="$UNTIS_SCHOOL" --title="Untis"|sed -e 's/\r//g')
-fi
+UNTIS_HOST=$(text_input Untis host $UNTIS_HOST)
+UNTIS_SCHOOL=$(text_input Untis code $UNTIS_SCHOOL)
 
 default "UNTIS_HOST" "$UNTIS_HOST"
 default "UNTIS_SCHOOL" "$UNTIS_SCHOOL"

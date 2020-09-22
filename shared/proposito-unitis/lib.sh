@@ -38,11 +38,44 @@ function message {
     FILENAME=$LIBDIR/messages.txt
   fi
   
-  p=$1
-  if [ -z "$p" ] ; then
-    p="untis"
+  if [ ! -z "$1" ] ; then
+    RESULT=$(grep ^$1= $FILENAME|sed -e "s/^$1=\(.*\)$/\1/g")
   fi
-  grep ^$p= $FILENAME|sed -e "s/^$p=\(.*\)$/\1/g"
+  if [ -z "$RESULT" ] ; then
+    RESULT=$1
+  fi
+  echo $RESULT
+}
+
+# $1 title $2 text
+function text_info {
+  if [ -z "$ZENITY" ] ; then
+    echo -n "$(message "$2"): "
+  else
+    $ZENITY --info --title="$(message "$1")" --text="$(message "$2")" --no-wrap
+  fi
+}
+
+# $1 title $2 text $3 default
+function text_input {
+  if [ -z "$ZENITY" ] ; then
+    echo -n "$(message "$2"): "
+    read RESULT
+  else
+    RESULT=$($ZENITY --entry --title="$(message "$1")" --text="$(message "$2")" --entry-text="$3"|sed -e 's/\r//g')
+  fi
+  echo $RESULT
+}
+
+# $1 title $2 text $3 default
+function password_input {
+  if [ -z "$ZENITY" ] ; then
+    echo -n "$(message "$2"): "
+    read -s RESULT
+  else
+    RESULT=$($ZENITY --entry --title="$(message "$1")" --text="$(message "$2")" --entry-text="$3" --hide-text|sed -e 's/\r//g')
+  fi
+  echo $RESULT
 }
 
 # set default $1 in .bashrc to value $2
