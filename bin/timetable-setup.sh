@@ -20,8 +20,8 @@ MYDIR=`dirname $0`
 LIBDIR=$MYDIR/../shared/proposito-unitis
 source $LIBDIR/lib.sh
 
-UNTIS_HOST=$(text_input Untis host $UNTIS_HOST)
-UNTIS_SCHOOL=$(text_input Untis code $UNTIS_SCHOOL)
+UNTIS_HOST=$(text_input Untis host "$UNTIS_HOST")
+UNTIS_SCHOOL=$(text_input Untis code "$UNTIS_SCHOOL")
 
 default "UNTIS_HOST" "$UNTIS_HOST"
 default "UNTIS_SCHOOL" "$UNTIS_SCHOOL"

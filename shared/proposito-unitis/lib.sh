@@ -21,7 +21,7 @@ if [ ! -z "$WINDOWS" ] ; then
 else
   ZENITY=zenity
 fi
-if [ -z "$(which zenity)" ] ; then
+if [ -z "$(which $ZENITY)" ] ; then
   ZENITY=
 fi
 
@@ -39,43 +39,57 @@ function message {
   fi
   
   if [ ! -z "$1" ] ; then
-    RESULT=$(grep ^$1= $FILENAME|sed -e "s/^$1=\(.*\)$/\1/g")
+    if [ -z "$(echo "$1"|sed -e 's/[a-z][a-z_]*//g')" ] ; then
+      RESULT=$(grep ^$1= $FILENAME|sed -e "s/^$1=\(.*\)$/\1/g")
+    fi
   fi
   if [ -z "$RESULT" ] ; then
     RESULT=$1
   fi
-  echo $RESULT
+  echo "$RESULT"
 }
 
 # $1 title $2 text
 function text_info {
-  if [ -z "$ZENITY" ] ; then
-    echo -n "$(message "$2"): "
+  if [ -x "$(which osascript)" ] ; then
+    osascript -e 'display dialog "'"$(message "$2")"'" with icon note buttons {"Ok"} default button "Ok"'|sed -e 's/button.returned:Ok//g'
   else
-    $ZENITY --info --title="$(message "$1")" --text="$(message "$2")" --no-wrap
+    if [ -z "$ZENITY" ] ; then
+      echo -n "$(message "$2"): "
+    else
+      $ZENITY --info --title="$(message "$1")" --text="$(message "$2")" --no-wrap
+    fi
   fi
 }
 
 # $1 title $2 text $3 default
 function text_input {
-  if [ -z "$ZENITY" ] ; then
-    echo -n "$(message "$2"): "
-    read RESULT
+  if [ -x "$(which osascript)" ] ; then
+    RESULT=$(osascript -e 'display dialog "'"$(message "$2")"'" default answer "'"$3"'" with icon note buttons {"Ok"} default button "Ok"'|sed -e 's/^.*text.returned:\(.*\)$/\1/g')
   else
-    RESULT=$($ZENITY --entry --title="$(message "$1")" --text="$(message "$2")" --entry-text="$3"|sed -e 's/\r//g')
+    if [ -z "$ZENITY" ] ; then
+      echo -n "$(message "$2"): "
+      read RESULT
+    else
+      RESULT=$($ZENITY --entry --title="$(message "$1")" --text="$(message "$2")" --entry-text="$3"|sed -e 's/\r//g')
+    fi
   fi
-  echo $RESULT
+  echo "$RESULT"
 }
 
 # $1 title $2 text $3 default
 function password_input {
-  if [ -z "$ZENITY" ] ; then
-    echo -n "$(message "$2"): "
-    read -s RESULT
+  if [ -x "$(which osascript)" ] ; then
+    RESULT=$(osascript -e 'display dialog "'"$(message "$2")"'" default answer "'"$3"'" with icon note buttons {"Ok"} default button "Ok" with hidden answer'|sed -e 's/^.*text.returned:\(.*\)$/\1/g')
   else
-    RESULT=$($ZENITY --entry --title="$(message "$1")" --text="$(message "$2")" --entry-text="$3" --hide-text|sed -e 's/\r//g')
+    if [ -z "$ZENITY" ] ; then
+      echo -n "$(message "$2"): "
+      read -s RESULT
+    else
+      RESULT=$($ZENITY --entry --title="$(message "$1")" --text="$(message "$2")" --entry-text="$3" --hide-text|sed -e 's/\r//g')
+    fi
   fi
-  echo $RESULT
+  echo "$RESULT"
 }
 
 # set default $1 in .bashrc to value $2
