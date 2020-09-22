@@ -39,26 +39,26 @@ PSTART=$(echo $1|sed -e 's/^\(.\).*/\1/g')
 while [ "$PSTART" = "-" ] ; do
   if [ "$1" = "-h" ] ; then
     shift
-    export UNTIS_HOST="$1"
+    UNTIS_HOST=${1}
   fi
   if [ "$1" = "-i" ] ; then
     INTERACTIVE=true
   fi
   if [ "$1" = "-o" ] ; then
     shift
-    export OUTFILE="$1"
+    OUTFILE=${1}
   fi
   if [ "$1" = "-l" ] ; then
     shift
-    export LANGUAGE="$1"
+    LANGUAGE=${1}
   fi
   if [ "$1" = "-p" ] ; then
     shift
-    export PASSWORD="$1"
+    PASSWORD=${1}
   fi
   if [ "$1" = "-s" ] ; then
     shift
-    export UNTIS_SCHOOL="$1"
+    UNTIS_SCHOOL=${1}
   fi
   shift
   PSTART=$(echo $1|sed -e 's/^\(.\).*/\1/g')
