@@ -34,6 +34,15 @@ if [ -z "$MYDIR" ] ; then
 fi
 LIBDIR=$MYDIR/shared/proposito-unitis
 source $MYDIR/shared/proposito-unitis/lib.sh
+PSTART=`echo $1|sed -e 's/^\(.\).*/\1/g'`
+while [ "$PSTART" = "-" ] ; do
+  if [ "$1" = "-l" ] ; then
+    shift
+    LANGUAGE=${1}
+  fi
+  shift
+  PSTART=`echo $1|sed -e 's/^\(.\).*/\1/g'`
+done
 if [ ! -z "$WINDOWS" ] && [ ! -f /usr/local/bin/zenity.exe ] ; then
   curl -Lo zenity.zip https://github.com/maravento/winzenity/raw/master/zenity.zip 2> /dev/null
   unzip zenity.zip

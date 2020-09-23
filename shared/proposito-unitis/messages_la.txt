@@ -1,0 +1,8 @@
+no_school=Erratum: Numerus Scholae Unte argumentum praebere debet vel per circumstantiae mutabilitas $UNTIS_SCHOOL.
+no_host=Erratum: Servus Telae Unte argumentum praebere debet vel per circumstantiae mutabilitas $UNTIS_HOST.
+host=Servus Telae Unte
+code=Numerus Scholae Unte
+username_url=Nomen usoris vel URL
+password_for=Imissio dictum pro
+installation=Installatio
+installation_completed=Venalium mitis paratus est.
