@@ -24,6 +24,7 @@ function usage {
    echo "Usage: $MYNAME [-i] [-s school] [-h host] [-p password] [-o filename] username_or_URL"
    echo ""
    echo "  -i                  interactive"
+   echo "  -k                  use plain console version without dialogs"
    echo "  -l language         set ISO-639 language code for output messages (except this one)"
    echo "     username_or_URL  login of the user or full URL to fetch an equivalent calender"
    echo "  -s school           untis UNTIS_SCHOOL for the given untis host (defaults to \$UNTIS_SCHOOL)"
@@ -47,6 +48,10 @@ while [ "$PSTART" = "-" ] ; do
   if [ "$1" = "-o" ] ; then
     shift
     OUTFILE=${1}
+  fi
+  if [ "$1" = "-k" ] ; then
+    GUI=
+    ZENITY=
   fi
   if [ "$1" = "-l" ] ; then
     shift

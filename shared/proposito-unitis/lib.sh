@@ -55,7 +55,7 @@ function text_info {
     osascript -e 'display dialog "'"$(message "$2")"'" with icon note buttons {"Ok"} default button "Ok"'|sed -e 's/button.returned:Ok//g'
   else
     if [ -z "$ZENITY" ] ; then
-      echo -n "$(message "$2"): "
+      echo "$(message "$2")"
     else
       $ZENITY --info --title="$(message "$1")" --text="$(message "$2")" --no-wrap
     fi
@@ -68,7 +68,7 @@ function text_input {
     RESULT=$(osascript -e 'display dialog "'"$(message "$2")"'" default answer "'"$3"'" with icon note buttons {"Ok"} default button "Ok"'|sed -e 's/^.*text.returned:\(.*\)$/\1/g')
   else
     if [ -z "$ZENITY" ] ; then
-      echo -n "$(message "$2"): "
+      echo -n "$(message "$2"): " 1>&2 
       read RESULT
     else
       RESULT=$($ZENITY --entry --title="$(message "$1")" --text="$(message "$2")" --entry-text="$3"|sed -e 's/\r//g')
@@ -83,7 +83,7 @@ function password_input {
     RESULT=$(osascript -e 'display dialog "'"$(message "$2")"'" default answer "'"$3"'" with icon note buttons {"Ok"} default button "Ok" with hidden answer'|sed -e 's/^.*text.returned:\(.*\)$/\1/g')
   else
     if [ -z "$ZENITY" ] ; then
-      echo -n "$(message "$2"): "
+      echo -n "$(message "$2"): " 1>&2 
       read -s RESULT
     else
       RESULT=$($ZENITY --entry --title="$(message "$1")" --text="$(message "$2")" --entry-text="$3" --hide-text|sed -e 's/\r//g')

@@ -31,10 +31,12 @@ fi
 function usage {
    echo "Usage: $MYNAME [-z] [-t file] -f form -s subject"
    echo ""
-   echo "  -f form     form to filter output for"
-   echo "  -s subject  school subject to filter output for"
-   echo "  -t file     timetable file (downloaded with fetchtimetable)"
-   echo "  -z          don't format time but use simple standard UTC based output"
+   echo "  -f form      form to filter output for"
+   echo "  -s subject   school subject to filter output for"
+   echo "  -t file      timetable file (downloaded with fetchtimetable)"
+   echo "  -l language  set ISO-639 language code for output messages (except this one)"
+   echo "  -k           use plain console version without dialogs"
+   echo "  -z           don't format time but use simple standard UTC based output"
    echo ""
    exit
 }
@@ -47,6 +49,14 @@ while [ "$PSTART" = "-" ] ; do
   if [ "$1" = "-f" ] ; then
     shift
     SCHOOL_FORM="$1"
+  fi
+  if [ "$1" = "-k" ] ; then
+    GUI=
+    ZENITY=
+  fi
+  if [ "$1" = "-l" ] ; then
+    shift
+    LANGUAGE=${1}
   fi
   if [ "$1" = "-s" ] ; then
     shift
@@ -64,7 +74,7 @@ while [ "$PSTART" = "-" ] ; do
 done
 
 if [ ! -f $TMPFILE ] ; then
-  echo "No timetable file $TMPFILE available. Please fetch current timetable data first."
+  text_info error no_timetable
   exit 1
 fi
 
