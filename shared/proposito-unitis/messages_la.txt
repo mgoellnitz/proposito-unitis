@@ -1,6 +1,6 @@
 error=Erratum
-no_school=Erratum: Numerus Scholae Unte argumentum praebere debet vel per circumstantiae mutabilitas $UNTIS_SCHOOL.
-no_host=Erratum: Servus Telae Unte argumentum praebere debet vel per circumstantiae mutabilitas $UNTIS_HOST.
+no_school=Erratum: Numerus Scholae Unte argumentum praebere debetur vel per circumstantiae mutabilitas $UNTIS_SCHOOL.
+no_host=Erratum: Servus reticuli Unte argumentum praebere debetur vel per circumstantiae mutabilitas $UNTIS_HOST.
 no_timetable=Nulla data propositi. Illae arcesse cum fetchtimetable.sh, queso.
 host=Servus Telae Unte
 code=Numerus Scholae Unte
