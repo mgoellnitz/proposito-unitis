@@ -8,3 +8,4 @@ username_url=Nom d'utilisateur ou URL
 password_for=Mot de passe pour
 installation=Installation
 installation_completed=L'installation est terminée.
+button_ok=Valider

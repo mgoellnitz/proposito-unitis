@@ -8,3 +8,4 @@ username_url=Username or URL
 password_for=Password for
 installation=Installation
 installation_completed=The installation is completed.
+button_ok=Ok

@@ -8,3 +8,4 @@ username_url=Nomen usoris vel URL
 password_for=Imissio dictum pro
 installation=Installatio
 installation_completed=Venalium mitis paratus est.
+button_ok=Bene
