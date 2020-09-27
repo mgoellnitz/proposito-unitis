@@ -17,7 +17,7 @@
 #
 MYNAME=`basename $0`
 MYDIR=`dirname $0`
-LIBDIR=$MYDIR/../shared/proposito-unitis
+LIBDIR=$MYDIR/../share/proposito-unitis
 source $LIBDIR/lib.sh
 
 TMPFILE="untis-timetable.ics"

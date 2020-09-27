@@ -27,13 +27,13 @@ if [ "$CHECK" -lt 3 ] ; then
   fi
 fi
 sudo cp bin/*.sh /usr/local/bin
-sudo cp -r shared/* /usr/local/shared
+sudo cp -r share/* /usr/local/share
 MYDIR=$(dirname $BASH_SOURCE)|sed -e 's/install\///g'|sed -e 's/^.bin/\./g'
 if [ -z "$MYDIR" ] ; then
   MYDIR="."
 fi
-LIBDIR=$MYDIR/shared/proposito-unitis
-source $MYDIR/shared/proposito-unitis/lib.sh
+LIBDIR=$MYDIR/share/proposito-unitis
+source $MYDIR/share/proposito-unitis/lib.sh
 PSTART=`echo $1|sed -e 's/^\(.\).*/\1/g'`
 while [ "$PSTART" = "-" ] ; do
   if [ "$1" = "-l" ] ; then
