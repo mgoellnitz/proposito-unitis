@@ -38,13 +38,19 @@ function message {
     FILENAME=$LIBDIR/messages.txt
   fi
   
-  if [ ! -z "$1" ] ; then
-    if [ -z "$(echo "$1"|sed -e 's/[a-z][a-z_]*//g')" ] ; then
-      RESULT=$(grep ^$1= $FILENAME|sed -e "s/^$1=\(.*\)$/\1/g")
+  local RESULT=
+  KEY=$1
+  shift
+  if [ ! -z "$KEY" ] ; then
+    if [ -z "$(echo "$KEY"|sed -e 's/[a-z][a-z_]*//g')" ] ; then
+      RESULT=$(grep ^$KEY= $FILENAME|sed -e "s/^$KEY=\(.*\)$/\1/g")
+      for p in $@ ; do
+        RESULT=$(echo $RESULT|sed -e "s/{}/$(echo $p|sed -e 's/\//\\\//g')/")
+      done
     fi
   fi
   if [ -z "$RESULT" ] ; then
-    RESULT=$1
+    RESULT=$KEY
   fi
   echo "$RESULT"
 }
