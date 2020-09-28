@@ -56,7 +56,7 @@ while [ "$PSTART" = "-" ] ; do
   fi
   if [ "$1" = "-l" ] ; then
     shift
-    SCHOOL_LANGUAGE=${1}
+    LANGUAGE=${1}
   fi
   if [ "$1" = "-s" ] ; then
     shift
