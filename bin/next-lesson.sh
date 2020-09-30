@@ -20,7 +20,7 @@ MYDIR=`dirname $0`
 LIBDIR=$MYDIR/../share/proposito-unitis
 source $LIBDIR/lib.sh
 
-TMPFILE="untis-timetable.ics"
+TMPFILE=~/.untis-timetable.ics
 DATEFILE="/tmp/date.list"
 if [ -z "$(uname -v|grep Darwin)" ] ; then
   ZULU=""
@@ -74,6 +74,16 @@ while [ "$PSTART" = "-" ] ; do
 done
 
 if [ ! -f $TMPFILE ] ; then
+  text_info error no_timetable
+  exit 1
+fi
+
+if [ -z "$(uname -v|grep Darwin)" ] ; then
+  AGE=$[ $(date +%s) - $(stat -t $TMPFILE |cut -d ' ' -f 14) ]
+else
+  AGE=$[ $(date +%s) - $(eval $(stat -s $TMPFILE) ; echo $st_mtime) ]
+fi
+if [ "$AGE" -gt 518400 ] ; then
   text_info error no_timetable
   exit 1
 fi

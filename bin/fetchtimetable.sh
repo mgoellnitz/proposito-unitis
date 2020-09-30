@@ -35,7 +35,7 @@ function usage {
    exit
 }
 
-OUTFILE=untis-timetable.ics
+OUTFILE=~/.untis-timetable.ics
 PSTART=$(echo $1|sed -e 's/^\(.\).*/\1/g')
 while [ "$PSTART" = "-" ] ; do
   if [ "$1" = "-h" ] ; then
