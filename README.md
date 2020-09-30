@@ -16,22 +16,26 @@ distribution install from the store on top of that.
 A limited GUI feeling is achived through simple dialog-to-shell tools
 (`zenity`) for GNU/Linux, Windows, and OS X (via `AppleScript`).
 
+
 ## Feedback
 
 This repository is available at [github][github] and [gitlab][gitlab]. Please 
 prefer the [issues][issues] section of this repository at [gitlab][gitlab]
 for feedback.
 
+
 ## Naming
 
 The name is just a pun on `viribus unitis` reflecting the fact, that we are
 mainly dealing with a time table here and that it sounds similar to untis.
+
 
 ## Windows Integration
 
 The use of this tool with windows is possible but limited to systems where the
 Windows Subsystem for Linux (WSL) is installed and a linux distribution
 `Debian` or `Ubuntu` is installed from the Store.
+
 
 ## Installation
 
@@ -51,6 +55,16 @@ the `WSL` user. Also answer the questions about the backend system in use.
 call `./install.sh` in the top level directory and answer the questions.
 
 (This installation method is not meant to be the most elegant way.)
+
+### Blind Installation
+
+The afforementioned way is also implemented as a script to be directly 
+downloaded and called by issuing
+
+```
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/mgoellnitz/proposito-unitis/master/blind-install.sh)"
+```
+
 
 ## Usage
 
@@ -124,6 +138,7 @@ next-lesson.sh -f 11 -s Bio
 Mo 21. Sep 13:40:00 CEST 2020
 ```
 
+
 ## Context Switches
 
 For convenience the environment variables defining your school code and host to use
@@ -143,9 +158,11 @@ Untis Host: stundenplan.hamburg.de
 Untis School Code: hh5848
 ```
 
+
 ## References
 
 The project avatar is taken from DarkWorkX @ Pixabay.
+
 
 ## Related Repositories on Github
 
