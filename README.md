@@ -10,7 +10,7 @@ This repository is to hack around certain limitations in the Untis accounts we
 have access to. It uses a parsed web-frontend and not the app backend so far.
 
 The scripts are mainly used with GNU/Linux but are also partially tested with
-MacOS and also Windows Systems with a `Windows Subsystem for Linux` and a Debian
+OS X and also Windows Systems with a `Windows Subsystem for Linux` and a Debian
 distribution install from the store on top of that.
 
 A limited GUI feeling is achived through simple dialog-to-shell tools
@@ -50,7 +50,7 @@ After downloading and extracting the archive
 Double click `install.bat`. When asked for a password, use the one given for 
 the `WSL` user. Also answer the questions about the backend system in use.
 
-### On Linux and MacOS Systems
+### On Linux and OS X Systems
 
 call `./install.sh` in the top level directory and answer the questions.
 
@@ -68,8 +68,10 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/mgoellnitz/proposito-uni
 
 ## Usage
 
-Derived from the main command to fetch two weeks of timetable data for
+Derived from the main command to fetch four weeks of timetable data for
 integration with calendar systems, subsequent selection commands are added.
+Four weeks will provide you with a view accors vacations - except the
+end of the term.
 
 Windows users double-click the commands from the windows folder of the
 installation.
