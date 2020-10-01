@@ -52,5 +52,7 @@ fi
 if [ ! -z "$(uname -v|grep Darwin)" ] ; then
   echo 'if [ -s ~/.bashrc ]; then source ~/.bashrc; fi' >> ~/.bash_profile
 fi
-timetable-setup.sh
+if [ -z "$UNTIS_HOST" ] ; then
+  timetable-setup.sh
+fi
 $(text_info installation installation_completed)
