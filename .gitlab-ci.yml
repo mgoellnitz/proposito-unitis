@@ -25,7 +25,8 @@ stages:
 build:
   stage: timetable
   script: 
-  - apt-get update ; apt-get install -yq jq file curl bash bash-completion
+  - chmod g-w $(ls */*.*)
+  - chmod o-w $(ls */*.*)
   - gradle build 
   - unzip build/distributions/*.zip
   artifacts:
