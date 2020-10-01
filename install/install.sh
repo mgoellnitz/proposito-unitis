@@ -26,8 +26,13 @@ if [ "$CHECK" -lt 3 ] ; then
     fi
   fi
 fi
-sudo cp bin/*.sh /usr/local/bin
-sudo cp -r share/* /usr/local/share
+if [ -w /usr/local/bin/timetable-setup.sh ] ; then
+  cp -p bin/*.sh /usr/local/bin
+  cp -rp share/* /usr/local/share
+else
+  sudo cp -p bin/*.sh /usr/local/bin
+  sudo cp -rp share/* /usr/local/share
+fi
 MYDIR=$(dirname $BASH_SOURCE)|sed -e 's/install\///g'|sed -e 's/^.bin/\./g'
 if [ -z "$MYDIR" ] ; then
   MYDIR="."
@@ -50,9 +55,11 @@ if [ ! -z "$WINDOWS" ] && [ ! -f /usr/local/bin/zenity.exe ] ; then
   rm zenity.zip
 fi
 if [ ! -z "$(uname -v|grep Darwin)" ] ; then
-  echo 'if [ -s ~/.bashrc ]; then source ~/.bashrc; fi' >> ~/.bash_profile
+  if [ -z "$(grep source....bashrc ~/.bash_profile)" ] ; then
+    echo 'if [ -s ~/.bashrc ]; then source ~/.bashrc; fi' >> ~/.bash_profile
+  fi
 fi
 if [ -z "$UNTIS_HOST" ] ; then
   timetable-setup.sh
+  $(text_info installation installation_completed)
 fi
-$(text_info installation installation_completed)
