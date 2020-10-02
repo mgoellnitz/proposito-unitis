@@ -99,7 +99,6 @@ else
   fi
 
   rm -f ~/.untis.cookies.$USERNAME
-  # echo "$UNTIS_HOST" > ~/.untis.host.$USERNAME
   DATA=$(curl -c ~/.untis.cookies.$USERNAME -X POST -D - \
               -d "school=${UNTIS_SCHOOL}&j_username=${USERNAME}&j_password=${PASSWORD}&token=" https://${UNTIS_HOST}/WebUntis/j_spring_security_check 2> /dev/null)
 
@@ -128,3 +127,5 @@ else
   fi
   curl -b ~/.untis.cookies.$USERNAME "https://${UNTIS_HOST}/WebUntis/Ical.do?elemType=5&elemId=455&rpt_sd=$WEEK" 2> /dev/null |grep -v BEGIN.VCALENDAR|grep -v PRODID:|grep -v VERSION:|grep -v CALSCALE:>> $OUTFILE
 fi
+
+rm -f ~/.untis.cookies.$USERNAME
