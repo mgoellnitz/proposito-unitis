@@ -22,11 +22,6 @@ source $LIBDIR/lib.sh
 
 TMPFILE=~/.untis-timetable.ics
 DATEFILE="/tmp/date.list"
-if [ -z "$(uname -v|grep Darwin)" ] ; then
-  ZULU=""
-else
-  ZULU="zulu"
-fi
 
 function usage {
    echo "Usage: $MYNAME [-z] [-t file] -f form -s subject"
@@ -116,7 +111,11 @@ echo $MARK>> $DATEFILE
 ZTIME=$(cat $DATEFILE|sort|grep -A1 $MARK|head -2|tail -1|cut -d ':' -f 2|sed -e 's/T/ /g'|sed -e 's/..Z//g')
 # echo $ZTIME
 if [ -z "$ZULU" ] ; then
-  date -d "TZ=\"UTC\" $ZTIME"
+  if [ -z "$(uname -v|grep Darwin)" ] ; then
+    date -d "TZ=\"UTC\" $ZTIME"
+  else
+    date -jf "%Y%m%d %H%M %z"  "$ZTIME +0000" "+%d.%m.%Y %H:%M %Z"
+  fi
 else
   echo $ZTIME
 fi
