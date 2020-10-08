@@ -20,8 +20,12 @@ MYDIR=`dirname $0`
 LIBDIR=$MYDIR/../share/proposito-unitis
 source $LIBDIR/lib.sh
 
-UNTIS_HOST=$(text_input Untis host "$UNTIS_HOST")
-UNTIS_SCHOOL=$(text_input Untis code "$UNTIS_SCHOOL")
-
-default "UNTIS_HOST" "$UNTIS_HOST"
-default "UNTIS_SCHOOL" "$UNTIS_SCHOOL"
+UNTIS_URL=$(text_input Untis url "$UNTIS_URL")
+if [ "$(echo "$UNTIS_URL"|grep ':'|wc -l)" -eq 0 ] ; then
+  UNTIS_HOST=$(text_input Untis host "$UNTIS_HOST")
+  UNTIS_SCHOOL=$(text_input Untis code "$UNTIS_SCHOOL")
+  default "UNTIS_HOST" "$UNTIS_HOST"
+  default "UNTIS_SCHOOL" "$UNTIS_SCHOOL"
+else
+  default "UNTIS_URL" "$UNTIS_URL"
+fi

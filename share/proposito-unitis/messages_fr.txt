@@ -2,6 +2,7 @@ error = Erreur
 no_school = Erreur\: Untis school doit être donné en paramètre ou par la variable d'environnement $UNTIS_SCHOOL.
 no_host = Erreur\: Untis Host doit être indiqué en paramètre ou par la variable d'environnement $UNTIS_HOST.
 no_timetable = Aucun horaire disponible. Veuillez d'abord récupérer les données de l'horaire actuel avec fetchtimetable.sh.
+url = 
 host = Untis Host
 code = Code scolaire Untis
 username_url = Nom d'utilisateur ou URL

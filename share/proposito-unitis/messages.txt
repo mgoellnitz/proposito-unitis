@@ -2,6 +2,7 @@ error = Error
 no_school = Error\: Untis school must be given as a parameter or by environment variable $UNTIS_SCHOOL.
 no_host = Error\: Untis Host must be given as a parameter or by environment variable $UNTIS_HOST.
 no_timetable = No timetable available. Please fetch current timetable data first with fetchtimetable.sh.
+url = Timetable URL or untis username (can be left empty)
 host = Untis Host
 code = Untis School Code
 username_url = Username or URL
