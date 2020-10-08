@@ -26,6 +26,5 @@ if [ "$(echo "$UNTIS_URL"|grep ':'|wc -l)" -eq 0 ] ; then
   UNTIS_SCHOOL=$(text_input Untis code "$UNTIS_SCHOOL")
   default "UNTIS_HOST" "$UNTIS_HOST"
   default "UNTIS_SCHOOL" "$UNTIS_SCHOOL"
-else
-  default "UNTIS_URL" "$UNTIS_URL"
 fi
+default "UNTIS_URL" "$UNTIS_URL"
