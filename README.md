@@ -70,8 +70,17 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/mgoellnitz/proposito-uni
 
 Derived from the main command to fetch four weeks of timetable data for
 integration with calendar systems, subsequent selection commands are added.
-Four weeks will provide you with a view accors vacations - except the
+Four weeks will provide you with a view across vacations - except the
 end of the term.
+
+Fetching timetable data can be achieved in two ways:
+
+* Web access via a simulated login and export of ICS-data
+* Use of the published timetable calendar URL to retriev ICS-data
+
+The first one is always possible and resembles clicks on the export button
+of four consecutive weeks in the web frontend. The latter requires that you
+pubilshed your timetable in the profile area of untis first.
 
 Windows users double-click the commands from the windows folder of the
 installation.
@@ -83,7 +92,7 @@ data can be fetched at once. So this is a rolling calendar switching to next
 week's data on saturdays.
 
 ```
-Usage: fetchtimetable.sh [-i] [-s school] [-h host] [-p password] [-o filename] username_or_URL
+Usage: fetchtimetable.sh [-i] [-s school] [-h host] [-p password] [-o filename] username
 ```
 
 If you prefer some - potentially GUI based - guidance, use the interactive mode
@@ -101,14 +110,24 @@ line argument in a cron-job:
 7 */2 * * * /home/www/fetchtimetable.sh -s xy1234 -h some.untis -p secret -o /var/www-data/somewhere/my.ics sus.or.lol
 ```
 
-With this running on a webserver, you can use the corresponding URL to 
-integrate the calender with any common calendar tool or mobile calendar.
+If you don't have the option to publish your calendar, you could use this on a
+webserver and use the corresponding URL to integrate resulting the calendar ICS
+file with any common calendar tool or mobile calendar.
 
 * Fetch calendar data from export URL
 
-If you don't need the web export and have a fixed URL to fetch equivalent
-timetable data from, you can issue a URL instead of the user's login name
-or even store this in the environment variable `UNTIS_URL`.
+If your calendar is published as optionally activated in your personal profile,
+or if you have a fixed URL of any other source to retrieve untis timetable
+information from, you can issue the URL instead of the username
+
+```
+fetchtimetable.sh [-o filename] URL
+```
+
+to fetch the timetable data.
+
+Also in this case you can set the resulting URL to the environment variable
+`UNTIS_URS` to avoid entering any parameters to `fetchtimetable.sh` at all.
 
 * Find next lesson
 
