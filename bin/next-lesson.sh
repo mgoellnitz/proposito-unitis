@@ -51,7 +51,7 @@ while [ "$PSTART" = "-" ] ; do
   fi
   if [ "$1" = "-l" ] ; then
     shift
-    LANGUAGE=${1}
+    set_language "$1" "$LANGUAGE" lock
   fi
   if [ "$1" = "-s" ] ; then
     shift
