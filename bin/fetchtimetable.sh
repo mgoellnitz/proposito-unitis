@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2020 Martin Goellnitz
+# Copyright 2020-2021 Martin Goellnitz
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@ MYNAME=`basename $0`
 MYDIR=`dirname $0`
 LIBDIR=$MYDIR/../share/proposito-unitis
 source $LIBDIR/lib.sh
+TMPFILE=~/.untis-timetable-t.ics
+CFILE=~/.untis-timetable-c.ics
 
 function usage {
    echo "Usage: $MYNAME [-i] [-s school] [-h host] [-p password] [-o filename] username_or_URL"
@@ -82,7 +84,7 @@ if [ -z "$USERNAME" ] ; then
 fi
 
 if [ "$(echo $USERNAME|grep ':'|wc -l)" -gt 0 ] ; then
-  curl "$USERNAME" 2> /dev/null > $OUTFILE
+  curl "$USERNAME" 2> /dev/null > $TMPFILE
 else
   if [ -z "$UNTIS_SCHOOL" ] ; then
      echo $(message "no_school")
@@ -123,25 +125,26 @@ else
     exit 1
   fi
 
-  curl -b ~/.untis.cookies.$USERNAME "https://${UNTIS_HOST}/WebUntis/Ical.do?elemType=$ETYPE&elemId=$EID&rpt_sd=$WEEK" 2> /dev/null |grep -v END.VCALENDAR> $OUTFILE
+  curl -b ~/.untis.cookies.$USERNAME "https://${UNTIS_HOST}/WebUntis/Ical.do?elemType=$ETYPE&elemId=$EID&rpt_sd=$WEEK" 2> /dev/null |grep -v END.VCALENDAR> $TMPFILE
   if [ -z "$(uname -v|grep Darwin)" ] ; then
     WEEK=$(date -d "+9  days" +%Y-%m-%d)
   else
     WEEK=$(date -jf "%s" $[ $(date "+%s") + (86400*9) ] "+%Y-%m-%d")
   fi
-  curl -b ~/.untis.cookies.$USERNAME "https://${UNTIS_HOST}/WebUntis/Ical.do?elemType=$ETYPE&elemId=$EID&rpt_sd=$WEEK" 2> /dev/null |grep -v VCALENDAR|grep -v PRODID:|grep -v VERSION:|grep -v CALSCALE:>> $OUTFILE
+  curl -b ~/.untis.cookies.$USERNAME "https://${UNTIS_HOST}/WebUntis/Ical.do?elemType=$ETYPE&elemId=$EID&rpt_sd=$WEEK" 2> /dev/null |grep -v VCALENDAR|grep -v PRODID:|grep -v VERSION:|grep -v CALSCALE:>> $TMPFILE
   if [ -z "$(uname -v|grep Darwin)" ] ; then
     WEEK=$(date -d "+16  days" +%Y-%m-%d)
   else
     WEEK=$(date -jf "%s" $[ $(date "+%s") + (86400*16) ] "+%Y-%m-%d")
   fi
-  curl -b ~/.untis.cookies.$USERNAME "https://${UNTIS_HOST}/WebUntis/Ical.do?elemType=$ETYPE&elemId=$EID&rpt_sd=$WEEK" 2> /dev/null |grep -v VCALENDAR|grep -v PRODID:|grep -v VERSION:|grep -v CALSCALE:>> $OUTFILE
+  curl -b ~/.untis.cookies.$USERNAME "https://${UNTIS_HOST}/WebUntis/Ical.do?elemType=$ETYPE&elemId=$EID&rpt_sd=$WEEK" 2> /dev/null |grep -v VCALENDAR|grep -v PRODID:|grep -v VERSION:|grep -v CALSCALE:>> $TMPFILE
   if [ -z "$(uname -v|grep Darwin)" ] ; then
     WEEK=$(date -d "+23  days" +%Y-%m-%d)
   else
     WEEK=$(date -jf "%s" $[ $(date "+%s") + (86400*23) ] "+%Y-%m-%d")
   fi
-  curl -b ~/.untis.cookies.$USERNAME "https://${UNTIS_HOST}/WebUntis/Ical.do?elemType=$ETYPE&elemId=$EID&rpt_sd=$WEEK" 2> /dev/null |grep -v BEGIN.VCALENDAR|grep -v PRODID:|grep -v VERSION:|grep -v CALSCALE:>> $OUTFILE
+  curl -b ~/.untis.cookies.$USERNAME "https://${UNTIS_HOST}/WebUntis/Ical.do?elemType=$ETYPE&elemId=$EID&rpt_sd=$WEEK" 2> /dev/null |grep -v BEGIN.VCALENDAR|grep -v PRODID:|grep -v VERSION:|grep -v CALSCALE:>> $TMPFILE
 fi
 
+mv $TMPFILE $OUTFILE
 rm -f ~/.untis.cookies.$USERNAME
