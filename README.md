@@ -187,7 +187,7 @@ The project avatar is taken from DarkWorkX @ Pixabay.
 
 ## Related Repositories on Github
 
-This is a deliberate collection of repositories relating to [Untis][untis].
+This is a arbitrary collection of repositories relating to [Untis][untis].
 
 * https://github.com/SapuSeven/BetterUntis
 * https://github.com/makubi/SchoolPlanner4Untis
