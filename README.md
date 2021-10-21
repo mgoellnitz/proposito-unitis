@@ -175,7 +175,7 @@ scripts.
 
 ```
 ./timetable-setup.sh
-Untis Host: stundenplan.hamburg.de
+Untis Host: ikarus.webuntis.com
 Untis School Code: hh5848
 ```
 
