@@ -27,6 +27,7 @@ function usage {
    echo ""
    echo "  -i                  interactive"
    echo "  -k                  use plain console version without dialogs"
+   echo "  -c                  condense timetable - add description to location"
    echo "  -l language         set ISO-639 language code for output messages (except this one)"
    echo "     username_or_URL  login of the user or full URL to fetch an equivalent calender"
    echo "  -s school           untis UNTIS_SCHOOL for the given untis host (defaults to \$UNTIS_SCHOOL)"
@@ -46,6 +47,9 @@ while [ "$PSTART" = "-" ] ; do
   fi
   if [ "$1" = "-i" ] ; then
     INTERACTIVE=true
+  fi
+  if [ "$1" = "-c" ] ; then
+    CONDENSE=true
   fi
   if [ "$1" = "-o" ] ; then
     shift
@@ -144,6 +148,20 @@ else
     WEEK=$(date -jf "%s" $[ $(date "+%s") + (86400*23) ] "+%Y-%m-%d")
   fi
   curl -b ~/.untis.cookies.$USERNAME "https://${UNTIS_HOST}/WebUntis/Ical.do?elemType=$ETYPE&elemId=$EID&rpt_sd=$WEEK" 2> /dev/null |grep -v BEGIN.VCALENDAR|grep -v PRODID:|grep -v VERSION:|grep -v CALSCALE:>> $TMPFILE
+fi
+
+if [ ! -z "$CONDENSE" ] ; then
+  echo -n "" > $CFILE
+  DESCRIPTION=""
+  while IFS='' read -r LINE || [[ -n "$LINE" ]]; do
+    LINE="$(echo $LINE|sed -e 's/\r//g')"
+    # echo "Line $DESCRIPTION: $LINE"
+    if [ ! -z "$(echo $LINE|grep '^DESCRIPTION:')" ] ; then
+      DESCRIPTION="$(echo $LINE|sed -e 's/^DESCRIPTION://g')"
+    fi
+    echo $LINE|sed -e "s/^LOCATION:\(.*\)/LOCATION:$DESCRIPTION \1/g" >> $CFILE
+  done < $TMPFILE
+  mv $CFILE $TMPFILE
 fi
 
 mv $TMPFILE $OUTFILE
